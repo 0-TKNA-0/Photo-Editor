@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from imageWidgets import *
+from PIL import Image, ImageTk
 
 class Editor(ctk.CTk):
     def __init__(self):
@@ -15,11 +16,20 @@ class Editor(ctk.CTk):
         self.columnconfigure(1, weight = 6)
 
         # Widgets
-        ImageImport(self, self.importImage)
+        self.image_Import = ImageImport(self, self.importImage)
 
         self.mainloop()
 
     def importImage(self, path):
-        pass
+        self.image = Image.open(path)
+
+        self.image_Import.grid_forget() # removes the import button
+        self.imageOutput = ImageOutput(self)
+        self.imageTK = ImageTk.PhotoImage(self.image)
+
+        self.resizeImage()
+        
+    def resizeImage(self):
+        self.imageOutput.create_image(0, 0, image = self.imageTK)
 
 Editor()

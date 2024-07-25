@@ -1,4 +1,6 @@
 import customtkinter as ctk
+from tkinter import filedialog, Canvas
+from settings import *
 
 class ImageImport(ctk.CTkFrame):
     def __init__(self, parent, importFunction):
@@ -10,5 +12,10 @@ class ImageImport(ctk.CTkFrame):
         ctk.CTkButton(self, text = "Import Image", command = self.openDialog).pack(expand = True)
     
     def openDialog(self):
-        path = "test"
+        path = filedialog.askopenfile().name # gets the actual path of the image once the user has selected it
         self.importFunction(path)
+
+class ImageOutput(Canvas):
+    def __init__(self, parent):
+        super().__init__(master = parent, background = backgroundColour, bd = 0, highlightthickness = 0, relief = "ridge")
+        self.grid(row = 0, column = 1, sticky = "nsew")

@@ -10,6 +10,7 @@ grayScaleDefault = False
 invertDefault = False
 
 # Colours
+backgroundColour = "#242424"
 white = "#FFFFFF"
 grey = "grey"
 blue = "#1F6AA5"
