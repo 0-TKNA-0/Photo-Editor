@@ -21,7 +21,7 @@ class Editor(ctk.CTk):
 
         self.mainloop()
 
-    # function for  importing the image and placing it on the canvas
+    # function for importing the image and placing it on the canvas
     def importImage(self, path):
         self.image = Image.open(path)
         self.imageRatio = self.image.size[0] / self.image.size[1]
@@ -29,6 +29,9 @@ class Editor(ctk.CTk):
 
         self.image_Import.grid_forget() # removes the import button
         self.imageOutput = ImageOutput(self, self.resizeImage)
+
+        # calls the close button class 
+        self.closeButton = CloseOutput(self, self.closeImage)
 
 
     # function for resizing the image
@@ -51,4 +54,12 @@ class Editor(ctk.CTk):
         self.imageTK = ImageTk.PhotoImage(resizedImage)
         self.imageOutput.create_image(event.width / 2, event.height / 2, image = self.imageTK)
 
+    # function for closing the image
+    def closeImage(self):
+        # hides the image + close button
+        self.imageOutput.grid_forget()
+        self.closeButton.place_forget()
+
+        # re-creates the import button
+        self.image_Import = ImageImport(self, self.importImage)
 Editor()
