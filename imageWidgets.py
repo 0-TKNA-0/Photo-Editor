@@ -16,6 +16,7 @@ class ImageImport(ctk.CTkFrame):
         self.importFunction(path)
 
 class ImageOutput(Canvas):
-    def __init__(self, parent):
+    def __init__(self, parent, resizeImage):
         super().__init__(master = parent, background = backgroundColour, bd = 0, highlightthickness = 0, relief = "ridge")
         self.grid(row = 0, column = 1, sticky = "nsew")
+        self.bind("<Configure>", resizeImage)

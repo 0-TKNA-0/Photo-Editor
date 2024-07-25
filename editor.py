@@ -2,6 +2,7 @@ import customtkinter as ctk
 from imageWidgets import *
 from PIL import Image, ImageTk
 
+# main class that contains the main window.
 class Editor(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -20,16 +21,34 @@ class Editor(ctk.CTk):
 
         self.mainloop()
 
+    # function for  importing the image and placing it on the canvas
     def importImage(self, path):
         self.image = Image.open(path)
-
-        self.image_Import.grid_forget() # removes the import button
-        self.imageOutput = ImageOutput(self)
+        self.imageRatio = self.image.size[0] / self.image.size[1]
         self.imageTK = ImageTk.PhotoImage(self.image)
 
-        self.resizeImage()
+        self.image_Import.grid_forget() # removes the import button
+        self.imageOutput = ImageOutput(self, self.resizeImage)
+
+
+    # function for resizing the image
+    def resizeImage(self, event):
+        # Current canvas ratio
+        canvasRatio = event.width / event.height
+
+        # Resize image
+        if canvasRatio > self.imageRatio: # Canvas is wider than the image
+            imageHeight = int(event.height)
+            imageWidth = int(imageHeight * self.imageRatio)
+        else: # Canvas is taller than the image
+            imageWidth = int(event.width)
+            imageHeight = int(imageWidth / self.imageRatio)
         
-    def resizeImage(self):
-        self.imageOutput.create_image(0, 0, image = self.imageTK)
+
+        # places the image on the canvas
+        self.imageOutput.delete("all")
+        resizedImage = self.image.resize((imageWidth, imageHeight))
+        self.imageTK = ImageTk.PhotoImage(resizedImage)
+        self.imageOutput.create_image(event.width / 2, event.height / 2, image = self.imageTK)
 
 Editor()
