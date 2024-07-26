@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from imageWidgets import *
+from menu import Menu
 from PIL import Image, ImageTk
 
 # main class that contains the main window.
@@ -7,14 +8,14 @@ class Editor(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_appearance_mode("dark")
-        self.geometry("1000x600")
+        self.geometry("1200x600")
         self.title("Photo Editor")
         self.minsize(800, 500)
 
         # Layout
         self.rowconfigure(0, weight = 1)
-        self.columnconfigure(0, weight = 2)
-        self.columnconfigure(1, weight = 6)
+        self.columnconfigure(0, weight = 2, uniform = "a")
+        self.columnconfigure(1, weight = 6, uniform = "a")
 
         # Widgets
         self.image_Import = ImageImport(self, self.importImage)
@@ -33,6 +34,8 @@ class Editor(ctk.CTk):
         # calls the close button class 
         self.closeButton = CloseOutput(self, self.closeImage)
 
+        # calls the side menu widget
+        self.menu = Menu(self)
 
     # function for resizing the image
     def resizeImage(self, event):
@@ -59,7 +62,9 @@ class Editor(ctk.CTk):
         # hides the image + close button
         self.imageOutput.grid_forget()
         self.closeButton.place_forget()
+        self.menu.grid_forget()
 
         # re-creates the import button
         self.image_Import = ImageImport(self, self.importImage)
+
 Editor()
