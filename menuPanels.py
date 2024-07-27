@@ -32,3 +32,32 @@ class SliderPanel(Panel):
     # function to round the dataVar to 2 decimal points
     def updateText(self, value):
         self.numberLabel.configure(text = f"{round(value, 2)}")
+
+class SegmentedPanel(Panel):
+    def __init__(self, parent, text, dataVar, options):
+        super().__init__(parent = parent)
+
+        ctk.CTkLabel(self, text = text).pack()
+        ctk.CTkSegmentedButton(self, variable = dataVar, values = options).pack(expand = True, fill = "both", padx = 4, pady = 4)
+
+class SwitchPanel(Panel):
+    def __init__(self, parent, *args): # ((variable, text), (variable, text), (variable, text))
+        super().__init__(parent = parent)
+
+        for variable, text in args:
+            switch = ctk.CTkSwitch(self, text = text, variable = variable, button_color = blue, fg_color = sliderBackground)
+            switch.pack(side = "left", expand = True, fill = "both", padx = 5, pady = 5)
+
+class DropDownPanel(ctk.CTkOptionMenu):
+    def __init__(self, parent, dataVar, options):
+        super().__init__(
+            master = parent, 
+            values = options, 
+            fg_color = darkGray, 
+            button_color = dropDownMainColour, 
+            button_hover_color = dropDownHoverColour, 
+            dropdown_fg_color = dropDownMenuColour,
+            variable = dataVar)
+        self.pack(fill = "x", pady = 4)
+
+        

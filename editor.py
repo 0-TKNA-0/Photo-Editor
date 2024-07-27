@@ -31,21 +31,35 @@ class Editor(ctk.CTk):
 
     # function that contains all of the parameters that is related to the image that is imported
     def initParameters(self):
-        self.rotateFloat = ctk.DoubleVar(value = rotateDefault)
-        self.zoomFloat = ctk.DoubleVar(value = zoomDefault)
+        self.posVars = {
+            "rotate": ctk.DoubleVar(value = rotateDefault),
+            "zoom": ctk.DoubleVar(value = zoomDefault),
+            "flip": ctk.StringVar(value = flipOption[0])}
 
-        self.rotateFloat.trace("w", self.manipulateImage)
-        self.zoomFloat.trace("w", self.manipulateImage)
+        self.colourVars = {
+            "brightness": ctk.DoubleVar(value = brightnessDefault),
+            "grayScale": ctk.BooleanVar(value = grayScaleDefault),
+            "invert": ctk.BooleanVar(value = invertDefault),
+            "vibrance": ctk.DoubleVar(value = vibranceDefault)}
+        
+        self.effectVars = {
+            "blur": ctk.DoubleVar(value = blurDefault),
+            "contrast": ctk.IntVar(value = contrastDefault),
+            "effect": ctk.StringVar(value = effectOption[0])}
+
+        # tracing
+        for variable in list(self.posVars.values()) + list(self.colourVars.values()) + list(self.effectVars.values()):
+            variable.trace("w", self.manipulateImage)
 
     # function that manipulates the image
     def manipulateImage(self, *args):
         self.image = self.original
 
         # rotate
-        self.image = self.image.rotate(self.rotateFloat.get())
+        self.image = self.image.rotate(self.posVars["rotate"].get())
 
         # zoom
-        self.image = ImageOps.crop(image = self.image, border = self.zoomFloat.get())
+        self.image = ImageOps.crop(image = self.image, border = self.posVars["zoom"].get())
 
         self.placeImage()
 
@@ -63,7 +77,7 @@ class Editor(ctk.CTk):
         self.closeButton = CloseOutput(self, self.closeImage)
 
         # calls the side menu widget
-        self.menu = Menu(self, self.rotateFloat, self.zoomFloat)
+        self.menu = Menu(self, self.posVars, self.colourVars, self.effectVars)
 
     # function for resizing the image
     def resizeImage(self, event):

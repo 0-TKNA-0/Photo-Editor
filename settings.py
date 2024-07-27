@@ -17,3 +17,7 @@ blue = "#1F6AA5"
 darkGray = "#4A4A4A"
 closeRed = "#8A0606"
 sliderBackground = "#64686B"
+
+dropDownMainColour = "#444444"
+dropDownHoverColour = "#333333"
+dropDownMenuColour = "#666666"
