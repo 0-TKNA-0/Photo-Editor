@@ -14,6 +14,10 @@ class SliderPanel(Panel):
         self.rowconfigure((0,1), weight = 1)
         self.columnconfigure((0,1), weight = 1)
 
+        # tracing
+        self.dataVar = dataVar
+        self.dataVar.trace("w", self.updateText)
+
         # Labels
         ctk.CTkLabel(self, text = text).grid(column = 0, row = 0, sticky = "w", padx = 5)
         self.numberLabel = ctk.CTkLabel(self, text = dataVar.get())
@@ -22,16 +26,15 @@ class SliderPanel(Panel):
         # Slider
         ctk.CTkSlider(
             self, 
-            fg_color = sliderBackground,
-            command = self.updateText, 
-            variable = dataVar, 
+            fg_color = sliderBackground, 
+            variable = self.dataVar, 
             from_= minValue, 
             to = maxValue
             ).grid(column = 1, columnspan = 2, row = 1, sticky = "ew", padx = 5, pady = 5)
     
     # function to round the dataVar to 2 decimal points
-    def updateText(self, value):
-        self.numberLabel.configure(text = f"{round(value, 2)}")
+    def updateText(self, *args):
+        self.numberLabel.configure(text = f"{round(self.dataVar.get(), 2)}")
 
 class SegmentedPanel(Panel):
     def __init__(self, parent, text, dataVar, options):
@@ -60,4 +63,13 @@ class DropDownPanel(ctk.CTkOptionMenu):
             variable = dataVar)
         self.pack(fill = "x", pady = 4)
 
-        
+class RevertButton(ctk.CTkButton):
+    def __init__(self, parent, *args):
+        super().__init__(master = parent, text = "Revert", command = self.revert)
+        self.pack(side = "bottom", pady = 10)
+        self.args = args
+
+    def revert(self):
+        for variable, value in self.args:
+            variable.set(value)
+

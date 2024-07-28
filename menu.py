@@ -29,6 +29,12 @@ class PositionFrame(ctk.CTkFrame):
         # Place segmented button panel
         SegmentedPanel(self, "Invert", posVars["flip"], flipOption)
 
+        # Place revert button
+        RevertButton(self, 
+            (posVars["rotate"], rotateDefault), 
+            (posVars["zoom"], zoomDefault), 
+            (posVars["flip"], flipOption[0]))
+
 class ColourFrame(ctk.CTkFrame):
     def __init__(self, parent, colourVars):
         super().__init__(master = parent)
@@ -41,6 +47,13 @@ class ColourFrame(ctk.CTkFrame):
         SliderPanel(self, "Brightness", colourVars["brightness"], 0, 5)
         SliderPanel(self, "Vibrance", colourVars["vibrance"], 0, 5)
 
+        # Place revert button
+        RevertButton(self, 
+            (colourVars["brightness"], brightnessDefault), 
+            (colourVars["grayScale"], grayScaleDefault), 
+            (colourVars["invert"], invertDefault), 
+            (colourVars["vibrance"], vibranceDefault))
+
 class EffectFrame(ctk.CTkFrame):
     def __init__(self, parent, effectVars):
         super().__init__(master = parent)
@@ -50,6 +63,12 @@ class EffectFrame(ctk.CTkFrame):
         DropDownPanel(self, effectVars["effect"], effectOption)
 
         # Places panels
-        SliderPanel(self, "Blur", effectVars["blur"], 0, 3)
+        SliderPanel(self, "Blur", effectVars["blur"], 0, 30)
         SliderPanel(self, "Contrast", effectVars["contrast"], 0, 10)
+
+        # Place revert button
+        RevertButton(self, 
+            (effectVars["blur"], blurDefault), 
+            (effectVars["contrast"], contrastDefault), 
+            (effectVars["effect"], effectOption[0]))
 

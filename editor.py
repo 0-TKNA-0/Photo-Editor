@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from imageWidgets import *
 from menu import Menu
-from PIL import Image, ImageTk, ImageOps
+from PIL import Image, ImageTk, ImageOps, ImageEnhance, ImageFilter
 
 # main class that contains the main window.
 class Editor(ctk.CTk):
@@ -56,10 +56,55 @@ class Editor(ctk.CTk):
         self.image = self.original
 
         # rotate
-        self.image = self.image.rotate(self.posVars["rotate"].get())
+        if self.posVars["rotate"].get() != rotateDefault:
+            self.image = self.image.rotate(self.posVars["rotate"].get())
 
         # zoom
-        self.image = ImageOps.crop(image = self.image, border = self.posVars["zoom"].get())
+        if self.posVars["zoom"].get() != zoomDefault:
+            self.image = ImageOps.crop(image = self.image, border = self.posVars["zoom"].get())
+
+        # flip
+        if self.posVars["flip"].get() != flipOption[0]:
+            if self.posVars["flip"].get() == "X":
+                self.image = ImageOps.mirror(self.image) # flips the image on the horizontal axis
+
+            elif self.posVars["flip"].get() == "Y":
+                self.image = ImageOps.flip(self.image) # flips the image on the vertical axis
+
+            elif self.posVars["flip"].get() == "Both":
+                self.image = ImageOps.mirror(self.image)
+                self.image = ImageOps.flip(self.image)
+
+        # brightness & vibrance
+        if self.colourVars["brightness"].get() != brightnessDefault:
+            brightnessEnhancer = ImageEnhance.Brightness(self.image)
+            self.image = brightnessEnhancer.enhance(self.colourVars["brightness"].get())
+
+        if self.colourVars["vibrance"].get() != vibranceDefault:
+            vibranceEnhancer = ImageEnhance.Color(self.image)
+            self.image = vibranceEnhancer.enhance(self.colourVars["vibrance"].get())    
+
+        # grayscale & invert
+        if self.colourVars["grayScale"].get(): # only works if grayscale is set to True
+            self.image = ImageOps.grayscale(self.image)
+
+        if self.colourVars["invert"].get():
+            self.image = ImageOps.invert(self.image)
+
+        # blur & contrast
+        if self.effectVars["blur"].get() != blurDefault:
+            self.image = self.image.filter(ImageFilter.GaussianBlur(self.effectVars["blur"].get()))
+
+        if self.effectVars["contrast"].get() != contrastDefault:
+            self.image = self.image.filter(ImageFilter.UnsharpMask(self.effectVars["contrast"].get()))
+        
+        # effects drop down box
+        match self.effectVars["effect"].get():
+            case "Emboss": self.image = self.image.filter(ImageFilter.EMBOSS)
+            case "Find Edges": self.image = self.image.filter(ImageFilter.FIND_EDGES)
+            case "Contour": self.image = self.image.filter(ImageFilter.CONTOUR)
+            case "Edge Enhance": self.image = self.image.filter(ImageFilter.EDGE_ENHANCE_MORE)
+
 
         self.placeImage()
 
