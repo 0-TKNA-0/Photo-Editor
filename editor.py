@@ -142,7 +142,8 @@ class Editor(ctk.CTk):
             self.imageHeight = int(self.imageWidth / self.imageRatio)
 
         self.placeImage()
-        
+
+    # function that places the image on the canvas
     def placeImage(self):
         # places the image on the canvas
         self.imageOutput.delete("all")

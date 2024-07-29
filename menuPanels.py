@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from tkinter import filedialog
 from settings import *
 
 class Panel(ctk.CTkFrame):
@@ -50,6 +51,65 @@ class SwitchPanel(Panel):
         for variable, text in args:
             switch = ctk.CTkSwitch(self, text = text, variable = variable, button_color = blue, fg_color = sliderBackground)
             switch.pack(side = "left", expand = True, fill = "both", padx = 5, pady = 5)
+
+class FileNamePanel(Panel):
+    def __init__(self, parent, nameString, fileString):
+        super().__init__(parent = parent)
+
+        self.nameString = nameString
+        self.nameString.trace("w", self.updateText)
+        self.fileString = fileString
+
+        # entry widget
+        ctk.CTkEntry(self, textvariable = self.nameString).pack(fill = "x", padx = 20, pady = 5)
+        
+        # frame with checkboxes
+        frame = ctk.CTkFrame(self, fg_color = "transparent")
+        jpgCheck = ctk.CTkCheckBox(
+            frame, 
+            text = "JPG", 
+            variable = self.fileString, 
+            command = lambda: self.click("jpg"), 
+            onvalue = "jpg", 
+            offvalue = "png")
+
+        pngCheck = ctk.CTkCheckBox(
+            frame, 
+            text = "PNG", 
+            variable = self.fileString, 
+            command = lambda: self.click("png"),
+            onvalue = "png", 
+            offvalue = "jpg")
+
+        jpgCheck.pack(side = "left", fill = "x", expand = True)
+        pngCheck.pack(side = "left", fill = "x", expand = True)
+        frame.pack(expand = True, fill = "x", padx = 20)
+
+
+        # output / preview label
+        self.output = ctk.CTkLabel(self, text = "")
+        self.output.pack()
+
+    def click(self, value):
+        self.fileString.set(value)
+        self.updateText()
+
+    def updateText(self, *args):
+        if self.nameString.get():
+            text = self.nameString.get().replace(" ", "_")+ "." + self.fileString.get()
+            self.output.configure(text = text) 
+
+class FilePathPanel(Panel):
+    def __init__(self, parent, pathString):
+        super().__init__(parent = parent)
+        self.pathString = pathString
+
+        ctk.CTkButton(self, text = "Open Explorer", command = self.openFileDialog).pack(pady = 5)
+        ctk.CTkEntry(self, textvariable = self.pathString).pack(expand = True, fill = "both", padx = 5, pady = 5)
+
+    def openFileDialog(self):
+        self.pathString.set(filedialog.askdirectory())
+    
 
 class DropDownPanel(ctk.CTkOptionMenu):
     def __init__(self, parent, dataVar, options):
