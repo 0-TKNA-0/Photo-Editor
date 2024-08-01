@@ -133,3 +133,15 @@ class RevertButton(ctk.CTkButton):
         for variable, value in self.args:
             variable.set(value)
 
+class SaveButton(ctk.CTkButton):
+    def __init__(self, parent, exportImage, nameString, fileString, pathString):
+        super().__init__(master = parent, text = "Save", command = self.save)
+        self.pack(side = "bottom", pady = 10)
+        
+        self.exportImage = exportImage
+        self.nameString = nameString
+        self.fileString = fileString
+        self.pathString = pathString
+
+    def save(self):
+        self.exportImage(self.nameString.get(), self.fileString.get(), self.pathString.get())

@@ -122,7 +122,7 @@ class Editor(ctk.CTk):
         self.closeButton = CloseOutput(self, self.closeImage)
 
         # calls the side menu widget
-        self.menu = Menu(self, self.posVars, self.colourVars, self.effectVars)
+        self.menu = Menu(self, self.posVars, self.colourVars, self.effectVars, self.exportImage)
 
     # function for resizing the image
     def resizeImage(self, event):
@@ -160,5 +160,12 @@ class Editor(ctk.CTk):
 
         # re-creates the import button
         self.image_Import = ImageImport(self, self.importImage)
+
+    # function to save the image
+    def exportImage(self, name, file, path):
+        exportString = f"{path}/{name}.{file}"
+
+        self.image.save(exportString)
+
 
 Editor()

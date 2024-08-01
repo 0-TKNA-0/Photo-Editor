@@ -2,7 +2,7 @@ import customtkinter as ctk
 from menuPanels import *
 
 class Menu(ctk.CTkTabview):
-    def __init__(self, parent, posVars, colourVars, effectVars):
+    def __init__(self, parent, posVars, colourVars, effectVars, exportImage):
         super().__init__(master = parent)
         self.grid(row = 0, column = 0, sticky = "nsew", pady = 10, padx = 10)
 
@@ -16,7 +16,7 @@ class Menu(ctk.CTkTabview):
         PositionFrame(self.tab("Position"), posVars)
         ColourFrame(self.tab("Colour"), colourVars)
         EffectFrame(self.tab("Effects"), effectVars)
-        ExportFrame(self.tab("Export"))
+        ExportFrame(self.tab("Export"), exportImage)
 
 class PositionFrame(ctk.CTkFrame):
     def __init__(self, parent, posVars):
@@ -74,7 +74,7 @@ class EffectFrame(ctk.CTkFrame):
             (effectVars["effect"], effectOption[0]))
 
 class ExportFrame(ctk.CTkFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, exportImage):
         super().__init__(master = parent)
         self.pack(expand = True, fill = "both")
         
@@ -86,4 +86,5 @@ class ExportFrame(ctk.CTkFrame):
         # widgets
         FileNamePanel(self, self.nameString, self.fileString)
         FilePathPanel(self, self.pathString)
+        SaveButton(self, exportImage, self.nameString, self.fileString, self.pathString)
 
